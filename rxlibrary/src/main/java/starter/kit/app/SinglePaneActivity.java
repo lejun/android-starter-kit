@@ -1,19 +1,22 @@
-package support.ui.app;
+package starter.kit.app;
+
+/**
+ * @author <a href="mailto:smartydroid.com@gmail.com">Smartydroid</a>
+ */
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import nucleus.presenter.Presenter;
 import starter.kit.rx.R;
 
 /**
- * A {@link AppCompatActivity} that simply contains a single fragment. The intent used to invoke
- * this
+ * A {@link StarterActivity} that simply contains a single fragment. The intent used to invoke this
  * activity is forwarded to the fragment as arguments during fragment instantiation. Derived
- * activities should only need to implement {@link SupportSinglePaneActivity#onCreatePane()}.
+ * activities should only need to implement {@link SimpleSinglePaneActivity#onCreatePane()}.
  */
-public abstract class SupportSinglePaneActivity extends SupportActivity {
+public abstract class SinglePaneActivity<P extends Presenter> extends StarterActivity<P> {
+
   private Fragment mFragment;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -50,46 +53,5 @@ public abstract class SupportSinglePaneActivity extends SupportActivity {
 
   public Fragment getFragment() {
     return mFragment;
-  }
-
-  /**
-   * Converts an intent into a {@link Bundle} suitable for use as fragment arguments.
-   */
-  public static Bundle intentToFragmentArguments(Intent intent) {
-    Bundle arguments = new Bundle();
-    if (intent == null) {
-      return arguments;
-    }
-
-    final Uri data = intent.getData();
-    if (data != null) {
-      arguments.putParcelable("_uri", data);
-    }
-
-    final Bundle extras = intent.getExtras();
-    if (extras != null) {
-      arguments.putAll(intent.getExtras());
-    }
-
-    return arguments;
-  }
-
-  /**
-   * Converts a fragment arguments bundle into an intent.
-   */
-  public static Intent fragmentArgumentsToIntent(Bundle arguments) {
-    Intent intent = new Intent();
-    if (arguments == null) {
-      return intent;
-    }
-
-    final Uri data = arguments.getParcelable("_uri");
-    if (data != null) {
-      intent.setData(data);
-    }
-
-    intent.putExtras(arguments);
-    intent.removeExtra("_uri");
-    return intent;
   }
 }

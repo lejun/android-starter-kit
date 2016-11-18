@@ -14,6 +14,14 @@ android {
     versionName "1.0"
   }
 
+  packagingOptions {
+    exclude 'META-INF/DEPENDENCIES'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE.txt'
+  }
+
   buildTypes {
      debug {
       applicationIdSuffix ".debug" // 为了不和 release 版本冲突
@@ -88,8 +96,8 @@ dependencies {
   compile deps.butterknife
   apt 'com.jakewharton:butterknife-compiler:' + rootProject.ext.depsVersion.butterknifeVersion
 
-//  compile project(':rxlibrary')
-  compile 'com.smartydroid:rxstarter:0.1'
+  compile project(':rxlibrary')
+//  compile 'com.smartydroid:rxstarter:0.1'
 }
 
 def gitVersionCode() {

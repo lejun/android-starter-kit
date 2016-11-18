@@ -9,17 +9,16 @@ import android.widget.EditText;
 import butterknife.BindView;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import nucleus.factory.RequiresPresenter;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import starter.kit.app.StarterActivity;
 import starter.kit.retrofit.ErrorResponse;
-import starter.kit.retrofit.RetrofitException;
-import starter.kit.feature.NetworkContract;
 import starter.kit.rx.app.R;
-import starter.kit.feature.rx.RxStarterActivity;
+import starter.kit.util.ErrorHandler;
+import starter.kit.util.NetworkContract;
 import support.ui.app.SupportApp;
 import work.wanghao.simplehud.SimpleHUD;
 
@@ -30,7 +29,7 @@ import static rx.android.schedulers.AndroidSchedulers.mainThread;
  * Copyright 2015-2016 qiji.tech. All rights reserved.
  */
 @RequiresPresenter(AuthPresenter.class)
-public class LoginActivity extends RxStarterActivity<AuthPresenter> implements
+public class LoginActivity extends StarterActivity<AuthPresenter> implements
     NetworkContract.View {
 
   @BindView(R.id.container_login_username) TextInputLayout mUsernameContainer;
@@ -156,12 +155,8 @@ public class LoginActivity extends RxStarterActivity<AuthPresenter> implements
     SimpleHUD.showInfoMessage(this, "登录成功");
   }
 
-  @Override public void onError(RetrofitException exception) {
-    try {
-      ErrorResponse errorResponse = exception.getErrorBodyAs(ErrorResponse.class);
-      SimpleHUD.showErrorMessage(this, errorResponse.getMessage());
-    } catch (IOException e) {
-      SimpleHUD.showErrorMessage(this, exception.getMessage());
-    }
+  @Override public void onError(Throwable exception) {
+    ErrorResponse errorResponse = ErrorHandler.handleThrowable(exception);
+    SimpleHUD.showErrorMessage(this, errorResponse.getMessage());
   }
 }
